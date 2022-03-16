@@ -5,4 +5,5 @@ const (
 	cr   = '\r'
 	lf   = '\n'
 	crlf = "\r\n"
+	ok   = "ok"
 )
