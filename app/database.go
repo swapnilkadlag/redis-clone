@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 	"time"
 )
@@ -35,5 +36,6 @@ func expireKey(key any, ms int) {
 func deleteKey(key any) {
 	db.Lock()
 	delete(db.data, key)
+	fmt.Println("Deleted key -> " + fmt.Sprint(key))
 	db.Unlock()
 }

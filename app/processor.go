@@ -1,22 +1,18 @@
 package main
 
-import (
-	"fmt"
-	"reflect"
-)
-
 func process(args []any) string {
-	cmdObject := args[0]
-	if reflect.ValueOf(cmdObject).Kind() == reflect.String {
-		cmd := fmt.Sprint(args[0])
+	if cmd, isString := args[0].(string); isString {
 		switch cmd {
 		case ping:
-			pingCommand(args)
+			return pingCommand(args)
 		case echo:
-			echoCommand(args)
+			return echoCommand(args)
+		case set:
+			return setCommand(args)
+		case get:
+			return getCommand(args)
 		}
-
-		return pingCommand(args)
+		return errorStringOf("Invalid command")
 	}
-	return "ERR"
+	return errorStringOf("Invalid args")
 }

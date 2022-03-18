@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -14,5 +13,9 @@ func pingCommand(args []any) string {
 	if len(args) == 1 {
 		return simpleStringOf(strings.ToUpper(pong))
 	}
-	return simpleStringOf(strings.ToUpper(fmt.Sprint(args[1])))
+	str, isString := args[1].(string)
+	if !isString {
+		return errorStringOf("Error")
+	}
+	return simpleStringOf(strings.ToUpper(str))
 }
