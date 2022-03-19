@@ -1,31 +1,29 @@
 package main
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
 
-var db = struct {
+type Database struct {
 	sync.RWMutex
 	data map[any]any
-}{data: make(map[any]any)}
+}
 
-func getKey(key any) any {
+func (db *Database) write(f func(db map[any]any)) {
+	db.Lock()
+	f(db.data)
+	db.Unlock()
+}
+
+func (db *Database) read(f func(db map[any]any) any) any {
 	db.RLock()
-	value := db.data[key]
+	value := f(db.data)
 	db.RUnlock()
 	return value
 }
 
-func setKey(key any, value any, px int) {
-	db.Lock()
-	db.data[key] = value
-	db.Unlock()
-	if px > 0 {
-		go expireKey(key, px)
-	}
-}
+var mainDb = Database{sync.RWMutex{}, map[any]any{}}
 
 func expireKey(key any, ms int) {
 	var duration = time.Duration(ms * int(time.Millisecond))
@@ -34,8 +32,23 @@ func expireKey(key any, ms int) {
 }
 
 func deleteKey(key any) {
-	db.Lock()
-	delete(db.data, key)
-	fmt.Println("Deleted key -> " + fmt.Sprint(key))
-	db.Unlock()
+	mainDb.write(func(db map[any]any) {
+		delete(db, key)
+	})
+}
+
+func getKey(key any) any {
+	value := mainDb.read(func(db map[any]any) any {
+		return db[key]
+	})
+	return value
+}
+
+func setKey(key any, value any, px int) {
+	mainDb.write(func(db map[any]any) {
+		db[key] = value
+	})
+	if px > 0 {
+		go expireKey(key, px)
+	}
 }

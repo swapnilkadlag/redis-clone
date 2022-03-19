@@ -64,7 +64,7 @@ func readNext(reader *bufio.Reader) (any, error) {
 	case integer:
 		return readInt(reader)
 	default:
-		return nil, errors.New("Invalid data type")
+		return nil, errors.New(invalidDataType)
 	}
 }
 
@@ -74,7 +74,7 @@ func readArray(reader *bufio.Reader) ([]any, error) {
 		return nil, err
 	}
 	if size == 0 {
-		return nil, errors.New("Array size can't be 0")
+		return nil, errors.New(invalidArgs)
 	}
 	arr := make([]any, size)
 	for i := range arr {

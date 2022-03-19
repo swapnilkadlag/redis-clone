@@ -1,12 +1,14 @@
 package main
 
-func contains(list []any, object any) int {
+import "fmt"
+
+func indexOf(list []any, object any) int {
 	for i := 0; i < len(list); i++ {
 		if list[i] == object {
 			return i
 		}
 	}
-	return -1
+	return null
 }
 
 func simpleStringOf(s string) string {
@@ -22,5 +24,5 @@ func errorStringOf(s string) string {
 }
 
 func integerStringOf(i int) string {
-	return string(integer) + string(i)
+	return string(integer) + fmt.Sprint(i) + crlf
 }

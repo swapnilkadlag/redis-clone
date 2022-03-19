@@ -13,9 +13,11 @@ func pingCommand(args []any) string {
 	if len(args) == 1 {
 		return simpleStringOf(strings.ToUpper(pong))
 	}
-	str, isString := args[1].(string)
-	if !isString {
-		return errorStringOf("Error")
+	if s, isString := args[1].(string); isString {
+		return simpleStringOf(s)
 	}
-	return simpleStringOf(strings.ToUpper(str))
+	if i, isInt := args[1].(int); isInt {
+		return integerStringOf(i)
+	}
+	return errorStringOf(invalidArg)
 }

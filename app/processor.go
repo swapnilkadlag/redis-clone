@@ -12,7 +12,7 @@ func process(args []any) string {
 		case get:
 			return getCommand(args)
 		}
-		return errorStringOf("Invalid command")
+		return errorStringOf(invalidCommand)
 	}
-	return errorStringOf("Invalid args")
+	return errorStringOf(invalidArg)
 }

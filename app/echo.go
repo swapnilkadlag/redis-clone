@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -10,5 +9,14 @@ const (
 )
 
 func echoCommand(args []any) string {
-	return simpleStringOf(strings.ToUpper(fmt.Sprint(args[1])))
+	if len(args) < 2 {
+		return errorStringOf(invalidArgs)
+	}
+	if s, isString := args[1].(string); isString {
+		return simpleStringOf(strings.ToUpper(s))
+	}
+	if i, isInt := args[1].(int); isInt {
+		return integerStringOf(i)
+	}
+	return errorStringOf(invalidArg)
 }
